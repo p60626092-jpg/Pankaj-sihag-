@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Euro Growth Panel</title>
+<style>
+:root{--navy:#10264b;--blue:#2458a6;--bg:#f3f6fb;--ink:#172033;--muted:#667085;--line:#e4e9f1}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(120deg,#10264b,#2860ad);color:white;padding:22px 18px}
+.wrap{max-width:980px;margin:auto}h1{font-size:24px;margin:0 0 5px}.sub{opacity:.85;font-size:13px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}button,.tab{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}
+.tab{background:#ffffff20;color:white}.tab.active{background:white;color:var(--navy)}
+main{max-width:980px;margin:20px auto;padding:0 14px}.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 5px 18px #10264b0a}
+h2{font-size:19px;margin:0 0 14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px}input,select,textarea{width:100%;padding:12px;border:1px solid #cfd7e3;border-radius:9px;font-size:15px;background:white}
+.primary{background:var(--blue);color:white;margin-top:14px}.secondary{background:#edf2fa;color:var(--navy)}
+.note{font-size:13px;color:var(--muted);line-height:1.5}.stat{background:#f6f8fc;border-radius:12px;padding:14px}.stat b{font-size:24px;display:block;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px 7px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted)}
+.hidden{display:none}.pill{background:#fff2d6;color:#805600;padding:4px 8px;border-radius:20px;font-size:11px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>🌍 EURO GROWTH PANEL</h1><div class="sub">Social media promotion & campaign booking</div>
+<nav>
+<button class="tab active" data-view="order">Place Order</button>
+<button class="tab" data-view="track">Track Order</button>
+<button class="tab" data-view="admin">Admin Demo</button>
+</nav></div></header>
+<main>
+<section id="order" class="view">
+<div class="panel"><h2>Promotion order form</h2>
+<p class="note">यह शुरुआती डेमो है। यहाँ ग्राहक प्रमोशन/शाउटआउट कैंपेन की रिक्वेस्ट भेज सकते हैं। नकली फॉलोअर्स या बॉट एंगेजमेंट की सेवा शामिल नहीं है।</p>
+<form id="orderForm">
+<div class="grid">
+<div><label>Your name</label><input id="customer" required placeholder="अपना नाम"></div>
+<div><label>WhatsApp number</label><input id="phone" required inputmode="tel" placeholder="10-digit mobile number"></div>
+<div><label>Instagram username / profile URL</label><input id="profile" required placeholder="@username या profile link"></div>
+<div><label>Promotion service</label><select id="service"><option>Travel page shoutout</option><option>Reel / post promotion</option><option>Influencer campaign inquiry</option><option>Content promotion package</option></select></div>
+<div><label>Budget (₹)</label><select id="budget"><option>₹300–₹500</option><option>₹500–₹1,000</option><option>₹1,000–₹3,000</option><option>₹3,000+</option></select></div>
+<div><label>Preferred date</label><input id="date" type="date"></div>
+</div>
+<label>Campaign details</label><textarea id="details" rows="3" placeholder="किस पोस्ट/रील का प्रमोशन चाहिए?"></textarea>
+<button class="primary" type="submit">Submit promotion request</button>
+</form><p id="success" class="note"></p></div>
+<div class="panel"><h2>Payment instructions</h2><p class="note">अपना UPI ID यहाँ जोड़ें। भुगतान मिलने के बाद ही ऑर्डर को manually confirm करें। इस डेमो में कोई असली पेमेंट नहीं लिया जाता।</p>
+<label>Business UPI ID (अपना UPI ID डालें)</label><input id="upi" placeholder="yourname@upi">
+<button class="secondary" id="saveUpi">Save on this device</button><p class="note" id="upiMsg"></p></div>
+</section>
+<section id="track" class="view hidden"><div class="panel"><h2>Track your request</h2><label>Order ID</label><input id="trackId" placeholder="उदाहरण: EGP-1001"><button class="primary" id="trackBtn">Check status</button><p id="trackResult" class="note"></p></div></section>
+<section id="admin" class="view hidden">
+<div class="panel"><h2>Admin dashboard (demo)</h2><p class="note">यह केवल इस डिवाइस पर चलने वाला डेमो है, सुरक्षित admin login या cloud database नहीं है। इसे सार्वजनिक वेबसाइट पर ऐसे ही न रखें।</p>
+<div class="grid"><div class="stat">Total requests<b id="total">0</b></div><div class="stat">Pending<b id="pending">0</b></div></div>
+<h2 style="margin-top:20px">Requests</h2><div style="overflow-x:auto"><table><thead><tr><th>Order</th><th>Customer / Contact</th><th>Service</th><th>Budget</th><th>Status</th><th>Action</th></tr></thead><tbody id="orders"></tbody></table></div>
+<button class="secondary" id="export">Download CSV</button>
+</div></section>
+</main><footer>Euro Growth Panel · Starter demo · Real payments and automatic fulfilment are not connected</footer>
+<script>
+const key='egp_demo_orders', upiKey='egp_demo_upi';
+const getOrders=()=>JSON.parse(localStorage.getItem(key)||'[]');
+const saveOrders=x=>localStorage.setItem(key,JSON.stringify(x));
+function render(){const a=getOrders();document.getElementById('total').textContent=a.length;document.getElementById('pending').textContent=a.filter(x=>x.status==='Pending').length;
+document.getElementById('orders').innerHTML=a.map(x=>`<tr><td>${x.id}</td><td>${esc(x.name)}<br>${esc(x.phone)}</td><td>${esc(x.service)}</td><td>${esc(x.budget)}</td><td><span class="pill">${x.status}</span></td><td><button class="secondary" onclick="setStatus('${x.id}')">Mark confirmed</button></td></tr>`).join('')||'<tr><td colspan="6">No requests yet</td></tr>'}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+window.setStatus=id=>{let a=getOrders();a=a.map(x=>x.id===id?{...x,status:'Confirmed'}:x);saveOrders(a);render()}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.view').forEach(x=>x.classList.toggle('hidden',x.id!==b.dataset.view));if(b.dataset.view==='admin')render()});
+document.getElementById('orderForm').onsubmit=e=>{e.preventDefault();let a=getOrders();let id='EGP-'+(1001+a.length);a.unshift({id,name:customer.value,phone:phone.value,profile:profile.value,service:service.value,budget:budget.value,date:date.value,details:details.value,status:'Pending'});saveOrders(a);success.textContent='Request saved. Your Order ID is '+id+'. इसे नोट कर लें।';e.target.reset();};
+document.getElementById('trackBtn').onclick=()=>{let x=getOrders().find(o=>o.id.toLowerCase()===trackId.value.trim().toLowerCase());trackResult.textContent=x?'Status: '+x.status+' · Service: '+x.service:'इस डिवाइस पर यह Order ID नहीं मिली।'};
+document.getElementById('saveUpi').onclick=()=>{localStorage.setItem(upiKey,upi.value.trim());upiMsg.textContent='UPI ID इस डिवाइस पर सेव हो गई (डेमो)।';};
+upi.value=localStorage.getItem(upiKey)||'';
+document.getElementById('export').onclick=()=>{let a=getOrders(), rows=[['Order ID','Name','Phone','Profile','Service','Budget','Date','Status'],...a.map(x=>[x.id,x.name,x.phone,x.profile,x.service,x.budget,x.date,x.status])];let csv=rows.map(r=>r.map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n');let blob=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(blob),l=document.createElement('a');l.href=u;l.download='euro-growth-orders.csv';l.click();URL.revokeObjectURL(u)};
+render();
+</script></body></html>
